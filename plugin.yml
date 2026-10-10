@@ -1,16 +1,16 @@
 ---
 name: DebugStick
-version: 0.0.1
+version: 0.0.2
 main: NhanAZ\DebugStick\Main
 api: 5.0.0
 
-website: https://github.com/NhanAZ
-description: "Working with block properties"
+website: https://github.com/NhanAZ-Plugins/DebugStick
+description: "Edit anvil and bamboo block properties with a debug stick"
 author: NhanAZ
 
 commands:
   debugstick:
-    description: "Give debug stick to sender"
+    description: "Give a debug stick to the player"
     permission: debugstick.command
 permissions:
   debugstick.command:
@@ -18,5 +18,5 @@ permissions:
     description: "Allows using /debugstick"
   debugstick.use:
     default: op
-    description: "Allows the player to use a bebug stick item"
+    description: "Allows the player to use a debug stick item"
 ...

@@ -9,7 +9,6 @@ use pocketmine\block\Bamboo;
 use pocketmine\block\Block;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
-use pocketmine\event\block\BlockUpdateEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\item\Item;
@@ -32,10 +31,10 @@ class Main extends PluginBase implements Listener {
 
 	protected function onEnable(): void {
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
-		$this->registerDubugSick();
+		$this->registerDebugStick();
 	}
 
-	private function registerDubugSick(): void {
+	private function registerDebugStick(): void {
 		StringToItemParser::getInstance()->register("debugstick", function (): Item {
 			$stick = VanillaItems::STICK();
 			$stick->setCustomName("Debug Stick");
@@ -70,8 +69,7 @@ class Main extends PluginBase implements Listener {
 
 	private function updateBlock(Block $block): void {
 		$blockPos = $block->getPosition();
-		$blockPos->getWorld()->scheduleDelayedBlockUpdate($blockPos->asVector3(), 0);
-		(new BlockUpdateEvent($block));
+		$blockPos->getWorld()->setBlock($blockPos, $block);
 	}
 
 	private function intAnvilFacingToText(int $facing): string {
@@ -86,7 +84,7 @@ class Main extends PluginBase implements Listener {
 			Facing::EAST => $string = "§c--- §6Facing §c---\n§9North(2)\n§9South(3)\n§9West(4)\n§b> §9East(5)",
 			default => throw new \Exception("Unknown status code")
 		};
-		return $string ?? throw new \Exception("Unknown status code");
+		return $string;
 	}
 
 	private function intAnvilDamageToText(int $damage): string {
@@ -99,7 +97,7 @@ class Main extends PluginBase implements Listener {
 			Anvil::VERY_DAMAGED => $string = "§c--- §6Damage §c---\n§9Undamaged(0)\n§9Sightly_Damaged(1)\n§b> §9Very_Damaged(2)",
 			default => throw new \Exception("Unknown status code")
 		};
-		return $string ?? throw new \Exception("Unknown status code");
+		return $string;
 	}
 
 	private function intLeafSizeToText(int $leafSize): string {
@@ -112,7 +110,7 @@ class Main extends PluginBase implements Listener {
 			Bamboo::LARGE_LEAVES => $string = "§c--- §6LeafSize §c---\n§9No_Leaves(0)\n§9Small_Leaves(1)\n§b> §9Large_Leaves(2)",
 			default => throw new \Exception("Unknown status code")
 		};
-		return $string ?? throw new \Exception("Unknown status code");
+		return $string;
 	}
 
 	private function boolReadyToText(bool $ready): string {
@@ -122,7 +120,13 @@ class Main extends PluginBase implements Listener {
 			true => $string = "§c--- §6Ready §c---\n§b> §9true(1)\n§9false(0)",
 			false => $string = "§c--- §6Ready §c---\n§9true(1)\n§b> §9false(0)"
 		};
-		return $string ?? throw new \Exception("Unknown status code");
+		return $string;
+	}
+
+	private function boolThickToText(bool $thick): string {
+		return $thick
+			? "§c--- §6Thick §c---\n§b> §9true(1)\n§9false(0)"
+			: "§c--- §6Thick §c---\n§9true(1)\n§b> §9false(0)";
 	}
 
 	public function onPlayerInteract(PlayerInteractEvent $event): void {
@@ -267,7 +271,7 @@ class Main extends PluginBase implements Listener {
 					return;
 				}
 				if ($action === PlayerInteractEvent::LEFT_CLICK_BLOCK) {
-					match (!$block->isReady()) {
+					match ($block->isReady()) {
 						true => $block->setReady(false),
 						false => $block->setReady(true)
 					};
@@ -279,10 +283,10 @@ class Main extends PluginBase implements Listener {
 				return;
 			}
 			if ($this->bambom[$playerName] == "thick") {
-				if ($action === PlayerInteractEvent::RIGHT_CLICK_BLOCK) {
-					return;
-				}
-				if ($action === PlayerInteractEvent::LEFT_CLICK_BLOCK) {
+				if ($action === PlayerInteractEvent::RIGHT_CLICK_BLOCK || $action === PlayerInteractEvent::LEFT_CLICK_BLOCK) {
+					$block->setThick(!$block->isThick());
+					$this->updateBlock($block);
+					$player->sendTip(self::boolThickToText($block->isThick()));
 					return;
 				}
 				return;
