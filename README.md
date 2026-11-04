@@ -1,6 +1,15 @@
 # DebugStick
 
-DebugStick lets an operator edit anvil and bamboo block properties in an Axolotl-PM world. It provides a tagged stick through `/debugstick` and stores each selected property per player.
+Edit anvil and bamboo block properties with a debug stick on Axolotl-PM
+
+[![CI](https://github.com/NhanAZ-Plugins/DebugStick/actions/workflows/build.yml/badge.svg)](https://github.com/NhanAZ-Plugins/DebugStick/actions/workflows/build.yml)
+[![Latest release](https://img.shields.io/github/v/release/NhanAZ-Plugins/DebugStick)](https://github.com/NhanAZ-Plugins/DebugStick/releases/latest)
+[![License](https://img.shields.io/github/license/NhanAZ-Plugins/DebugStick)](https://github.com/NhanAZ-Plugins/DebugStick/blob/master/LICENSE)
+[![Discord](https://img.shields.io/discord/986553214889517088?label=Discord&logo=discord&logoColor=white&color=5865F2)](https://discord.gg/j2X83ujT6c)
+
+## Overview
+
+This plugin targets the PocketMine-MP and Axolotl-PM API 5 ecosystem and is maintained under [NhanAZ-Plugins](https://github.com/NhanAZ-Plugins).
 
 ## Requirements and compatibility
 
